@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            align-items: stretch;
+            height: 100%;
+        }
+        .content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            margin-right: auto; /* Pour pousser le contenu vers la gauche */
+            display: flex;
+            flex-direction: column; /* Pour empiler les éléments à l'intérieur */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+        }
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .contact-info {
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+            width: 100%; /* Ajuster la largeur pour correspondre à celle du formulaire */
+            margin-top: 20px; /* Ajout de marge pour séparer du formulaire */
+        }
+        .contact-email {
+            font-weight: bold;
+            color: #333;
+        }
+        .image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+        .image img {
+            max-width: 100%; /* Pour que l'image reste dans la largeur de son conteneur */
+            max-height: 100%; /* Pour que l'image reste dans la hauteur de son conteneur */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <form action="/send_email" method="POST">
+                <h1>Contactez nous !</h1>
+                <label for="name">Votre Nom:</label><br>
+                <input type="text" id="name" name="name" required><br>
+                
+                <label for="email">Votre email:</label><br>
+                <input type="email" id="email" name="email" required><br>
+                
+                <label for="message">Message:</label><br>
+                <textarea id="message" name="message" rows="4" required></textarea><br>
+                
+                <button type="submit">Send Message</button>
+            </form>
+            <div class="contact-info">
+                <p>Pour toute question, veuillez contacter : <span class="contact-email">contactus.gossipproject@gmail.com</span></p>
+            </div>
+        </div>
+        <div class="image">
+            <img src="https://www.chroniquedisney.fr/imgPerso/donaldville/1934-donald-duck-00.png" alt="Side Image">
+        </div>
+    </div>
+</body>
+</html>

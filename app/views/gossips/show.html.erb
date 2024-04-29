@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Détails du Potin</title>
+</head>
+<body>
+  <h1>Détails du Potin</h1>
+  <p><strong>Auteur :</strong> <%= link_to @gossip.user.first_name, user_path(@gossip.user) %></p>
+  <p><strong>Title :</strong> <%= @gossip.title %></p>
+  <p><strong>Contenu :</strong> <%= @gossip.description %></p>
+  <p><strong>Date de création :</strong> <%= @gossip.created_at.strftime("%d/%m/%Y %H:%M") %></p>
+</body>
+</html>
