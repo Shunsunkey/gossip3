@@ -3,4 +3,6 @@
 <p><strong>Prénom :</strong> <%= @user.first_name %></p>
 <p><strong>Nom :</strong> <%= @user.last_name %></p>
 <p><strong>Âge :</strong> <%= @user.age %></p>
+<p><strong>Ville :</strong> <%= link_to @user.city.name, city_path(@user.city) %></p> <!-- Ajout de la ville -->
 <p><strong>Email :</strong> <%= @user.email %></p>
+<p><strong>Description :</strong> <%= @user.description %></p>

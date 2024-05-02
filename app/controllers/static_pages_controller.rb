@@ -4,9 +4,10 @@ class StaticPagesController < ApplicationController
   def contact
   end
   def welcome
-    @first_name = params[:first_name] || "Hortense"
+    @user = current_user
   end
-  def accueil
+  def index
     @gossips = Gossip.all
+    @tags = Tag.all
   end
 end

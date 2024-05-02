@@ -1,0 +1,7 @@
+<div class="comment">
+  <p><strong><%= comment.user.name %></strong></p>
+  <p><%= comment.text %></p>
+  <%= link_to "Modifier", edit_gossip_comment_path(@gossip, comment) %>
+  <%= link_to "Supprimer", gossip_comment_path(@gossip, comment), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir supprimer ce commentaire ?" } %>
+  <%= link_to "Détails du commentaire", gossip_comment_path(@gossip, comment) %>
+</div>

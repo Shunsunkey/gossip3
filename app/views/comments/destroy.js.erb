@@ -1,0 +1,4 @@
+// Mettre à jour la page pour afficher le flash d'alerte
+<% flash.each do |type, message| %>
+  toastr["<%= type %>"]("<%= message %>");
+<% end %>

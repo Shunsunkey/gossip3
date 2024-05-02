@@ -1,0 +1,11 @@
+<!-- app/views/cities/show.html.erb -->
+<h1>Détails de la ville</h1>
+
+<p><strong>Nom de la ville :</strong> <%= @city.name %></p>
+
+<h2>Potins écrits par les utilisateurs de cette ville :</h2>
+<ul>
+  <% @gossips.each do |gossip| %>
+    <li><%= link_to gossip.title, gossip_path(gossip) %></li>
+  <% end %>
+</ul>

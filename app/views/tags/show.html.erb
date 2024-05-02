@@ -1,0 +1,9 @@
+<!-- app/views/tags/show.html.erb -->
+
+<h1>Liste des potins pour le tag <%= @tag.name %></h1>
+
+<ul>
+  <% @gossips.each do |gossip| %>
+    <li><%= link_to gossip.title, gossip_path(gossip) %></li>
+  <% end %>
+</ul>

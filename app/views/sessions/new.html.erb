@@ -1,0 +1,57 @@
+<style>
+    .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh; /* Ajuster la hauteur à la taille de l'écran */
+    }
+
+    body {
+      background-image: url('https://www.chroniquedisney.fr/imgPerso/donaldville/1937-riri-fifi-loulou-00.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        display: flex;
+        flex-direction: column; /* Pour empiler les éléments à l'intérieur */
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    label {
+        font-weight: bold;
+    }
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>
+<body>
+<div class="content">
+<h1>Connexion</h1>
+<%= form_for(:session, url: sessions_path, class: "needs-validation") do |form| %>
+    <div class="form-group">
+        <%= form.label :email %>
+        <%= form.email_field :email, class: "form-control", required: true %>
+        <div class="invalid-feedback">
+            Veuillez fournir une adresse e-mail valide.
+        </div>
+    </div>
+    <div class="form-group">
+        <%= form.label :password, "Mot de passe" %>
+        <%= form.password_field :password, class: "form-control", required: true %>
+        <div class="invalid-feedback">
+            Veuillez fournir un mot de passe.
+        </div>
+    </div>
+    <%= form.submit "Se connecter", class: "btn btn-primary btn-block" %>
+<% end %>
+</div>
+</body>

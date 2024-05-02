@@ -1,8 +1,19 @@
 Rails.application.routes.draw do
-  root 'static_pages#accueil'
+  root 'static_pages#index'
   get '/team', to: 'static_pages#team'
   get '/contact', to: 'static_pages#contact'
-  get 'welcome/:first_name', to: 'static_pages#welcome', as: 'welcome'
-  resources :gossips
-  resources :users, only: [:show]
+  get '/welcome', to: 'static_pages#welcome'
+  get '/static_page', to: 'static_pages#index', as: 'static_pages_index'
+  post 'gossips/gossip_id/like', to: 'likes#create', as: 'like_gossip'
+  delete '/logout', to: 'sessions#destroy', as: 'logout' # Ajout de la route de déconnexion
+  resources :gossips do
+    resources :comments, only: [:create, :edit, :update, :destroy]
+    resources :likes, only:[:create, :destroy]
+  end
+
+  resources :users, only: [:new, :create, :show] # Ajout de la ressource pour les utilisateurs
+  resources :cities, only: [:show]
+  resources :tags, only: [:show]
+  resources :sessions, only: [:new, :create, :destroy] # Correction du nom du contrôleur de sessions
+  
 end

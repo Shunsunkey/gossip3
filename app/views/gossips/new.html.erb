@@ -1,0 +1,112 @@
+<style>
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+}
+.content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    margin-right: auto; /* Pour pousser le contenu vers la gauche */
+    display: flex;
+    flex-direction: column; /* Pour empiler les éléments à l'intérieur */
+}
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+input[type="text"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+textarea {
+    height: 100px;
+}
+button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #45a049;
+}
+.contact-info {
+    text-align: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+    width: 100%; /* Ajuster la largeur pour correspondre à celle du formulaire */
+    margin-top: 20px; /* Ajout de marge pour séparer du formulaire */
+}
+.contact-email {
+    font-weight: bold;
+    color: #333;
+}
+.image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4;
+}
+.image img {
+    max-width: 100%; /* Pour que l'image reste dans la largeur de son conteneur */
+    max-height: 100%; /* Pour que l'image reste dans la hauteur de son conteneur */
+}
+</style>
+<%= form_tag gossips_path, method: :post do %>
+
+    <% if flash[:danger] %>
+      <div class="alert alert-danger">
+        <%= flash[:danger] %>
+      </div>
+    <% end %>
+  
+    <div class="container">
+      <div class="content">
+        <h1>Créons un nouveau potin !</h1>
+        
+        <label for="title">Titre :</label><br>
+        <%= text_field_tag 'gossip[title]', nil, class: "form-control" %><br>
+      
+        <label for="desc">Contenu :</label><br>
+        <%= text_area_tag 'gossip[description]', nil, class: "form-control" %><br><br>
+      
+        <div class="form-group">
+          <%= label_tag :user_id, "Auteur" %>
+          <%= select_tag 'gossip[user_id]', options_for_select(User.all.collect { |u| [u.first_name, u.id] }), class: "form-control" %>
+        </div>
+      
+        <%= select_tag "tag_ids[]", options_from_collection_for_select(Tag.all, :id, :name), { prompt: "Sélectionnez un tag", multiple: true } %>
+      
+        <%= submit_tag "Submit", class: "btn btn-primary" %>
+        
+      </div>
+  
+      <div class="image">
+        <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/87b29407-2b43-4c40-865b-2b8f0dc384bf/dfxhiw4-543e9b1c-f0c5-4e05-b127-1078fc50d7f9.jpg/v1/fill/w_681,h_1173,q_70,strp/picsou_by_davidjor_dfxhiw4-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MjIwNSIsInBhdGgiOiJcL2ZcLzg3YjI5NDA3LTJiNDMtNGM0MC04NjViLTJiOGYwZGMzODRiZlwvZGZ4aGl3NC01NDNlOWIxYy1mMGM1LTRlMDUtYjEyNy0xMDc4ZmM1MGQ3ZjkuanBnIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.KJZQEmnl9jBlQebkQhHpeHzhoi-4DY2RGUA4Uw54lFI" alt="Side Image">
+      </div>
+    </div>
+  
+  <% end %>

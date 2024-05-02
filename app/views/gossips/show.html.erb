@@ -2,12 +2,110 @@
 <html>
 <head>
   <title>Détails du Potin</title>
+  <style>
+    /* Style CSS */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .gossip-details {
+      margin-bottom: 20px;
+    }
+
+    .comment {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .comment-content {
+      margin-bottom: 10px;
+    }
+
+    .comment-actions {
+      margin-top: 10px;
+    }
+
+    .btn {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Détails du Potin</h1>
-  <p><strong>Auteur :</strong> <%= link_to @gossip.user.first_name, user_path(@gossip.user) %></p>
-  <p><strong>Title :</strong> <%= @gossip.title %></p>
-  <p><strong>Contenu :</strong> <%= @gossip.description %></p>
-  <p><strong>Date de création :</strong> <%= @gossip.created_at.strftime("%d/%m/%Y %H:%M") %></p>
+  <div class="container">
+    <% flash.each do |key, value| %>
+      <div class="alert alert-<%= key %>">
+        <%= value %>
+      </div>
+    <% end %>
+    <div class="gossip-details">
+      <h1>Détails du Potin</h1>
+      <p><strong>Auteur :</strong> <%= link_to @gossip.user.first_name, user_path(@gossip.user) %></p>
+      <p><strong>Ville :</strong> <%= link_to @gossip.user.city.name, city_path(@gossip.user.city) %></p>
+      <p><strong>Titre :</strong> <%= @gossip.title %></p>
+      <p><strong>Contenu :</strong> <%= @gossip.description %></p>
+      <p><strong>Date de création :</strong> <%= @gossip.created_at.strftime("%d/%m/%Y %H:%M") %></p>
+
+      <p><strong>Tags :</strong>
+      <% @gossip.tags.each do |tag| %>
+        <%= link_to tag.name, tag_path(tag) %>
+      <% end %></p>
+
+      <div class="gossip-actions">
+        <%= link_to "Modifier ce potin", edit_gossip_path(@gossip), class: "btn btn-primary" %>
+        <%= form_with(model: @gossip, method: :delete, local: true, data: { confirm: "Êtes-vous sûr de vouloir supprimer ce potin ?" }) do |form| %>
+          <%= form.submit "Supprimer", class: "btn btn-danger" %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="comments">
+      <h2>Commentaires :</h2>
+      <% @gossip.comments.each do |comment| %>
+        <div class="comment">
+          <p><strong>Créateur :</strong> <%= comment.user.first_name %></p>
+          <div class="comment-content">
+            <p><strong>Contenu :</strong> <%= comment.text %></p>
+            <p><strong>Date de création :</strong> <%= comment.created_at.strftime("%d/%m/%Y %H:%M") %></p>
+          </div>
+          <div class="comment-actions">
+            <%= link_to "Modifier", edit_gossip_comment_path(@gossip, comment), class: "btn btn-primary" %>
+            <%= form_with(model: [@gossip, comment], method: :delete, local: false, data: { confirm: "Êtes-vous sûr de vouloir supprimer ce commentaire ?", remote: true }) do |form| %>              <%= form.submit "Supprimer", class: "btn btn-danger" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="add-comment">
+      <h2>Ajouter un commentaire :</h2>
+      <%= form_with(model: [@gossip, @comment]) do |form| %>
+        <div class="form-group">
+          <%= form.text_area :text, placeholder: "Votre commentaire..." %>
+        </div>
+        <div class="form-group">
+          <%= form.submit "Ajouter commentaire", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </body>
 </html>

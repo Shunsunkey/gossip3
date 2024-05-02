@@ -1,74 +1,63 @@
 require "faker"
 
+# Supprimer les données existantes
 User.destroy_all
+GossipTag.destroy_all
 Gossip.destroy_all
+Tag.destroy_all
 
-#créer 10 villes aléatoires
+
+# Créer 10 villes aléatoires
 cities = []
 10.times do
-    city= City.create!(name: Faker::Address.city, zip_code: Faker::Address.postcode)
-    cities << city
+  city = City.create!(name: Faker::Address.city, zip_code: Faker::Address.postcode)
+  cities << city
 end
 
-#créer 10 utilisateurs aléatoires
-users = []
+# Création d'utilisateurs factices
 10.times do
-    user = User.create!(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, description: Faker::Lorem.paragraph(sentence_count:5), email: Faker::Internet.email, age: Faker::Number.between(from: 13, to: 60))
-    users << user
-    user.city = cities.sample
+  first_name = Faker::Name.first_name
+  last_name = Faker::Name.last_name
+  email = Faker::Internet.email
+  age = Faker::Number.between(from: 18, to: 90)
+  city_id = Faker::Number.between(from: 1, to: 10)
+  username = "#{first_name.downcase}.#{last_name.downcase}" # Utiliser une combinaison de prénom et de nom pour l'username
+
+  # Vérifier si le nom d'utilisateur est unique, sinon en générer un nouveau
+  while User.exists?(username: username)
+    username = "#{username}.#{Faker::Number.unique.number(digits: 2)}" # Ajouter un nombre unique pour garantir l'unicité
+  end
+
+  User.create!(
+    first_name: first_name,
+    last_name: last_name,
+    email: email,
+    age: age,
+    city_id: city_id,
+    username: username,
+    password: 'password123',
+    password_confirmation: 'password123'
+  )
 end
 
-#créer 10 gossips aléatoires
-gossips = []
+
+
+# Créer 10 tags aléatoires
+10.times do
+  Tag.create!(name: Faker::Lorem.word)
+end
+
+# Créer 20 gossips aléatoires
 20.times do
-    gossip = Gossip.create!(title: Faker::Hacker.say_something_smart, description: Faker::Lorem.paragraph(sentence_count:5), user: users.sample)
-    gossips << gossip
-end
-
-#vérifier l'insertion et l'attribution users/gossips
-users[0].gossips #changer l'index si pas de gossips
-
-#créer 10 tags aléatoires
-tags = []
-10.times do
-    tag = Tag.create!(name: Faker::Lorem.words(number: 1), user: users.sample)
-    tags << tag
-end
-
-#attribuer 10 tags aléatoires à un ou plusieurs gossips
-10.times do
-    gossiptag = GossipTag.create!(gossip: gossips.sample, tag: tags.sample)
-end
-
-#vérifier tags du user index 0 et du gossip index 0
-users[0].tags
-gossips[0].tags
-
-#vérifier la ville de user index 5
-users[5].city
-
-#création de 25 messages aléatoires + attribution d'un destinataire obligatoire
-messages = []
-25.times do
-    message = Message.create!(user: users.sample, message: Faker::Lorem.paragraph(sentence_count:5))
-    recipient = Recipient.create(user: users.sample, message: message)
-    messages << message
-end
-
-#attribution de plusieurs messages avec un ou plusieurs destinataires
-25.times do
-    recipient = Recipient.create(user: users.sample, message: messages.sample)
-end
-
-#vérifier la ville du user à l'index 5
-puts users[5].city.name
-
-#vérifier les messages du user à l'index 5
-users[5].messages.each do |message|
-    puts message.message  
-end
-
-#vérifier les destinataires de chaque message de l'user index 5 | !!! comme les messages sont attribués au hasard, certains messages n'ont pas de destinataire
-messages[5].users.each do |user|
-    puts user.first_name
+  user = User.all.sample
+  gossip = user.gossips.create!(
+    title: Faker::Hacker.say_something_smart,
+    description: Faker::Lorem.paragraph(sentence_count: 5)
+  )
+  
+  # Associer des tags aléatoires à chaque gossip
+  rand(1..5).times do
+    tag = Tag.all.sample
+    gossip.tags << tag unless gossip.tags.include?(tag)
+  end
 end
