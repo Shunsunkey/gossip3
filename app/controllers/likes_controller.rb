@@ -1,32 +1,30 @@
-# app/controllers/likes_controller.rb
 class LikesController < ApplicationController
-    before_action :find_gossip
-  
-    def create
-      @like = current_user.likes.new(gossip: @gossip)
-      if @like.save
-        redirect_to @redirect_path, notice: 'Gossip liked!'
-      else
-        redirect_to @redirect_path, alert: 'Error liking gossip!'
-      end
-    end
-  
-    def destroy
-      @like = current_user.likes.find_by(gossip: @gossip)
-      if @like.destroy
-        redirect_to @redirect_path, notice: 'Gossip unliked!'
-      else
-        redirect_to @redirect_path, alert: 'Error unliking gossip!'
-      end
-    end
-  
-    private
-  
-    def find_gossip
-      @gossip = Gossip.find(params[:gossip_id])
-    end
+  before_action :find_gossip
 
-    def set_redirect_path
-      @redirect_path = request.referer || root_path
+  def create
+    @like = current_user.likes.build(gossip: @gossip)
+    if @like.save
+      flash[:success] = "Gossip liked!"
+    else
+      flash[:error] = "Unable to like gossip."
+    end
+    redirect_to @gossip
   end
-  
+
+  def destroy
+    @like = current_user.likes.find_by(gossip: @gossip)
+    if @like
+      @like.destroy
+      flash[:success] = "Like removed."
+    else
+      flash[:error] = "Unable to remove like."
+    end
+    redirect_to @gossip
+  end
+
+  private
+
+  def find_gossip
+    @gossip = Gossip.find(params[:gossip_id])
+  end
+end

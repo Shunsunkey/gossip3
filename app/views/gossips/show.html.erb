@@ -47,6 +47,11 @@
     .form-group {
       margin-bottom: 10px;
     }
+
+    .btn-group {
+      display: inline-block;
+      margin-right: 10px;
+    }
   </style>
 </head>
 <body>
@@ -63,38 +68,32 @@
       <p><strong>Titre :</strong> <%= @gossip.title %></p>
       <p><strong>Contenu :</strong> <%= @gossip.description %></p>
       <p><strong>Date de création :</strong> <%= @gossip.created_at.strftime("%d/%m/%Y %H:%M") %></p>
-
       <p><strong>Tags :</strong>
       <% @gossip.tags.each do |tag| %>
         <%= link_to tag.name, tag_path(tag) %>
-      <% end %></p>
-
+      <% end %>
+      </p>
       <div class="gossip-actions">
-        <%= link_to "Modifier ce potin", edit_gossip_path(@gossip), class: "btn btn-primary" %>
-        <%= form_with(model: @gossip, method: :delete, local: true, data: { confirm: "Êtes-vous sûr de vouloir supprimer ce potin ?" }) do |form| %>
-          <%= form.submit "Supprimer", class: "btn btn-danger" %>
-        <% end %>
+        <div class="btn-group">
+          <%= link_to "Modifier ce potin", edit_gossip_path(@gossip), class: "btn btn-primary" %>
+        </div>
+        <div class="btn-group">
+          <%= form_with(model: @gossip, method: :delete, local: true, data: { confirm: "Êtes-vous sûr de vouloir supprimer ce potin ?" }) do |form| %>
+            <%= form.submit "Supprimer", class: "btn btn-danger" %>
+          <% end %>
+        </div>
+        <div class="btn-group">
+          <% if current_user %>
+            <% if current_user.likes.exists?(gossip_id: @gossip.id) %>
+            <%= button_to "Unlike", unlike_gossip_path(@gossip), method: :delete, remote: true %>
+            <% else %>
+            <%= button_to "Like", like_gossip_path(@gossip), method: :post, remote: true %>
+            <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
-
-    <div class="comments">
-      <h2>Commentaires :</h2>
-      <% @gossip.comments.each do |comment| %>
-        <div class="comment">
-          <p><strong>Créateur :</strong> <%= comment.user.first_name %></p>
-          <div class="comment-content">
-            <p><strong>Contenu :</strong> <%= comment.text %></p>
-            <p><strong>Date de création :</strong> <%= comment.created_at.strftime("%d/%m/%Y %H:%M") %></p>
-          </div>
-          <div class="comment-actions">
-            <%= link_to "Modifier", edit_gossip_comment_path(@gossip, comment), class: "btn btn-primary" %>
-            <%= form_with(model: [@gossip, comment], method: :delete, local: false, data: { confirm: "Êtes-vous sûr de vouloir supprimer ce commentaire ?", remote: true }) do |form| %>              <%= form.submit "Supprimer", class: "btn btn-danger" %>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    </div>
-
+  
     <div class="add-comment">
       <h2>Ajouter un commentaire :</h2>
       <%= form_with(model: [@gossip, @comment]) do |form| %>

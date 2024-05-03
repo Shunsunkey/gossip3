@@ -79,7 +79,7 @@
               <p><strong>Nombre de commentaires :</strong> <%= gossip.comments.count %></p>
               <p><strong>Nombre de likes :</strong> <%= gossip.likes.count %></p>
               <!-- Ajoute un bouton "Like" -->
-              <%= link_to "Like", like_gossip_path(gossip), method: :post, class: "btn btn-primary like-btn", data: { gossip-id: gossip.id } %>
+              <%= link_to "Like", like_gossip_path(gossip), method: :post, class: "btn btn-primary like-btn", data: { 'gossip-id' => gossip.id } %>
               <!-- Ajoute un lien vers la page dédiée du potin -->
               <%= link_to "Voir plus", gossip, class: "btn btn-info" %>
             </div>
